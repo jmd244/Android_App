@@ -22,6 +22,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.vyw.tflite.algorithm.BlazeFaceNcnn
@@ -228,6 +229,26 @@ class CameraStarter : Activity(), SurfaceHolder.Callback {
         setContentView(binding.root)
 
         blazefacecnn.initiateCamera()
+
+        binding.back.setOnClickListener{
+            val mBuilder = AlertDialog.Builder(this)
+                .setTitle("Exit")
+                .setMessage("Are you sure you want to go back in main menu?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                .setNegativeButton("No", null)
+
+            val mAlertDialog = mBuilder.create()
+            mAlertDialog.show()
+
+            val mNoButton = mAlertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            mNoButton.setOnClickListener {
+                mAlertDialog.cancel()
+            }
+        }
 
         binding.cameraview.holder.setFormat(PixelFormat.RGBA_8888)
         binding.cameraview.holder.addCallback(this)

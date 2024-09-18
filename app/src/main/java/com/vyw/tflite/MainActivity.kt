@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
                 val prefs = getSharedPreferences(SPLASH_PREFS, Context.MODE_PRIVATE)
                 prefs.edit().putBoolean(SPLASH_FLAG_KEY, true).apply()
 
-                finish()
+                finishAffinity()
                 exitProcess(-1)
             }
             .setNegativeButton("No", null)

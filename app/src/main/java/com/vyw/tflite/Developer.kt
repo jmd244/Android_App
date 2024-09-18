@@ -21,6 +21,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -32,6 +33,7 @@ import com.vyw.tflite.maincomponent.ThreadPool
 import com.vyw.tflite.maincomponent.ThresholdSensor
 import java.lang.NullPointerException
 import java.time.Instant
+import kotlin.system.exitProcess
 
 class Developer : AppCompatActivity(), SurfaceHolder.Callback {
     private lateinit var binding: ActivityDeveloperBinding
@@ -261,6 +263,26 @@ class Developer : AppCompatActivity(), SurfaceHolder.Callback {
         binding.cameraview.holder.setFormat(PixelFormat.RGBA_8888)
         binding.cameraview.holder.addCallback(this)
 
+        binding.back.setOnClickListener{
+            val mBuilder = AlertDialog.Builder(this)
+                .setTitle("Exit")
+                .setMessage("Are you sure you want to go back in main menu?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                .setNegativeButton("No", null)
+
+            val mAlertDialog = mBuilder.create()
+            mAlertDialog.show()
+
+            val mNoButton = mAlertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            mNoButton.setOnClickListener {
+                mAlertDialog.cancel()
+            }
+        }
+
         reload()
     }
 
@@ -309,12 +331,6 @@ class Developer : AppCompatActivity(), SurfaceHolder.Callback {
     override fun onDestroy() {
         super.onDestroy()
         isCameraOpen = blazefacecnn.closeCamera()
-    }
-
-    fun back_click(view: View) {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 
     @Deprecated("Deprecated in Java")
